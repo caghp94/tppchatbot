@@ -424,6 +424,44 @@ controller.hears(['call me (.*)', 'my name is (.*)'], 'message_received', functi
     });
 });
 
+controller.hears(['dni (.*)', 'mi dni es (.*)'], 'message_received', function(bot, message) {
+    var dni = message.match[1];
+    var http = require('http')
+    var data = JSON.stringify({
+        'Cod_Terminal': '000000001011',
+        'Numero_Documento': dni 
+    });
+
+    var options = {
+        host: 'http://216.244.172.158',
+        port: 15000,
+        path: '/api/index.php/ws.consultas.saldo.chbt',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Content-Length': data.length
+        }
+    };
+    
+    /*
+    var req = http.request(options, function(res){
+        res.setEncoding('utf8');
+        var body = '';
+        res.on('data', function(chunk){
+            body+=chunk;
+        });
+        res.on('end', function(){
+            var parsed = JSON.parse(body);
+            if(parsed.Codigo_Respuesta != '00'){
+                bot.reply(message, 'Tu saldo es ' + parsed.Saldo);
+            }else{
+                bot.reply(message, 'No se pudo obtener saldo');
+            }
+        })
+    })*/
+    bot.reply(message, 'holaasd');
+});
+
 controller.hears(['what is my name', 'who am i'], 'message_received', function(bot, message) {
     controller.storage.users.get(message.user, function(err, user) {
         if (user && user.name) {
